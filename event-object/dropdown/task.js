@@ -1,13 +1,16 @@
-let arr = Array.from(document.getElementsByClassName('dropdown__item'));
-let item = document.querySelector('.dropdown__value');
-let listItem = document.querySelector('.dropdown__list');
+let dropdownArray = Array.from(document.getElementsByClassName('dropdown__value'));
 
-item.addEventListener('click', () => listItem.classList.toggle('dropdown__list_active'));
-
-for (let i = 0; i < arr.length; i++) {
-    arr[i].onclick = (event) => {
-        event.preventDefault();
-        item.textContent = arr[i].textContent;
+for (let i = 0; i < dropdownArray.length; i++) {
+    dropdownArray[i].onclick = () => {
+        let itemArray = Array.from(document.getElementsByClassName('dropdown__item'));
+        let listItem = document.querySelector('.dropdown__list');
         listItem.classList.toggle('dropdown__list_active');
+        for (let j = 0; j < itemArray.length; j++) {
+            itemArray[j].onclick = (event) => {
+                event.preventDefault();
+                dropdownArray[i].textContent = itemArray[j].textContent;
+                listItem.classList.toggle('dropdown__list_active');
+            };
+        };
     };
-}
+};
