@@ -18,7 +18,10 @@ class Game {
 
   registerEvents() {
     document.addEventListener('keydown', (event) => {
-      if (event.key === this.currentSymbol.textContent) {
+      if (event.key === 'CapsLock' || event.key === 'Shift') {
+        return;
+      }
+      if (event.key.toLowerCase() === this.currentSymbol.textContent.toLowerCase()) {
         this.success();
       } else {
         this.fail();
