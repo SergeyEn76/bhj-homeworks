@@ -1,59 +1,52 @@
 let cart = document.querySelector('.cart__products');
 let cartProducts = Array.from(document.querySelectorAll('.cart__product'));
-let products = document.querySelector('.products');
-let productsTypes = Array.from(document.querySelectorAll('.product')).length;
-let t1 = Array.from(document.querySelectorAll('[data-id]'));
+let productsIDarray = Array.from(document.querySelectorAll('[data-id]'));
 
-
-function addToCard(addID, prodIMG, prodValue) {
-    let t3 = 0;
-    for (let element of cartProducts) {
-        let checkId = element.getAttribute('data-id');
-        if (parseInt(checkId) === parseInt(addID)) {
-            t3 = checkId;
-        } else {
-            
-        }
-    }
-    if (t3 === 0) {
-        cart.insertAdjacentHTML('beforeend', `<div class="cart__product" data-id="${addID}"><img class="cart__product-image" src="${prodIMG}"><div class="cart__product-count">${prodValue}</div></div>`);
-        cartProducts = Array.from(document.querySelectorAll('.cart__product'));
-        t3=0;
-    } else if (t3 > 0) {
-        let t2 = cartProducts[t3-1].querySelector('.cart__product-count').textContent;
-        cartProducts[t3-1].querySelector('.cart__product-count').textContent = parseInt(t2) + parseInt(prodValue);
-        cartProducts = Array.from(document.querySelectorAll('.cart__product'));
-        t3=0;
-    }
-}
-
-for (let i = 0; i < t1.length; i++) {
-    let iD = t1[i].getAttribute('data-id');
-    let tDec = t1[i].querySelector('.product__quantity-control_dec');
-    let tInc = t1[i].querySelector('.product__quantity-control_inc');
-    let tvalue = t1[i].querySelector('.product__quantity-value');
-    let cartAdd = t1[i].querySelector('.product__add');
+for (let i = 0; i < productsIDarray.length; i++) {
+    let iD = productsIDarray[i].getAttribute('data-id');
+    let prodDec = productsIDarray[i].querySelector('.product__quantity-control_dec');
+    let prodInc = productsIDarray[i].querySelector('.product__quantity-control_inc');
+    let prodValue = productsIDarray[i].querySelector('.product__quantity-value');
+    let cartAdd = productsIDarray[i].querySelector('.product__add');
     
-    tInc.addEventListener('click', () => {
-        let inc = parseInt(tvalue.textContent);
+    //увеличения количества товара
+    prodInc.addEventListener('click', () => {
+        let inc = parseInt(prodValue.textContent);
         inc++;
-        tvalue.textContent = inc;
+        prodValue.textContent = inc;
     });
 
-    tDec.addEventListener('click', () => {
-        let inc = parseInt(tvalue.textContent);
-        inc--;
-        if (inc < 1) {
-            inc = 1;
+    //уменьшения количества товара
+    prodDec.addEventListener('click', () => {
+        let dec = parseInt(prodValue.textContent);
+        dec--;
+        if (dec < 1) {
+            dec = 1;
         }
-        tvalue.textContent = inc;
+        prodValue.textContent = dec;
     });
 
+    //добавление товара в корзину
     cartAdd.addEventListener('click', () => {
-        let prodID = parseInt(iD);
-        let prodIMG = t1[i].querySelector('.product__image').src;
-        let prodValue = parseInt(tvalue.textContent);
+        const productInCart = cartProducts.find((element) =>
+            element.getAttribute('data-id') === iD
+        );
 
-        addToCard(prodID, prodIMG, prodValue);
-    })
+        let prodID = parseInt(iD);
+        let prodIMG = productsIDarray[i].querySelector('.product__image').src;
+        let proddValue = parseInt(prodValue.textContent); 
+
+        if (productInCart) {
+            cartProducts.find((element) => {
+                if (element.getAttribute('data-id') === iD) {
+                    let currentValue = element.querySelector('.cart__product-count').textContent;
+                    element.querySelector('.cart__product-count').textContent = parseInt(currentValue) + proddValue;
+                    cartProducts = Array.from(document.querySelectorAll('.cart__product'));
+                }
+            });
+        } else {
+            cart.insertAdjacentHTML('beforeend', `<div class="cart__product" data-id="${prodID}"><img class="cart__product-image" src="${prodIMG}"><div class="cart__product-count">${proddValue}</div></div>`);
+            cartProducts = Array.from(document.querySelectorAll('.cart__product'));
+        }
+   })
 }
