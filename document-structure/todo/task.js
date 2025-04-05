@@ -1,29 +1,25 @@
 let form = document.forms.tasks__form;
 let taskList = document.querySelector('.tasks__list');
-let tasksArray = Array.from(document.querySelectorAll('.task__remove'));
+let tasksArray = Array.from(document.querySelectorAll('.task'));
 let storageTasks = localStorage.getItem('task');
-//localStorage.removeItem('task');
 
-function tasksStorage() {
-    //добавление задач в localstorage
-    let tempArray = [];
-    for (let element of tasksArray) {
-        tempArray.push(element.textContent);
-    }
+function tasksStorage() { //сохранение задач в localstorage
+    let tempArray = tasksArray.map((element) => {
+        return element.querySelector('.task__title').textContent;
+    });
     localStorage.setItem('task', tempArray);
 }
 
-function tasks() {
-    //проверка наличия задач в localstorage и вывод на экран
+function newTasks(newtask){ //создание новой задачи
+    taskList.insertAdjacentHTML('beforeend', `<div class="task"><div class="task__title">${newtask}</div><a href="#" class="task__remove">&times;</a></div>`);
+    tasksArray = Array.from(document.querySelectorAll('.task'));
+}
+
+function tasks() { //проверка наличия задач в localstorage и вывод на экран
     if (storageTasks !== null && storageTasks !== '') {
         let tempStorage = storageTasks.split(',');
         for (let element of tempStorage) {
-            let lastSymbol = element.substring(element.length - 1, element.length);
-            if (lastSymbol === '×') {
-                element = element.substring(0, element.length - 1);
-            }
-            taskList.insertAdjacentHTML('beforeend', `<div class="task"><div class="task__title">${element}</div><a href="#" class="task__remove">&times;</a></div>`);
-            tasksArray = Array.from(document.querySelectorAll('.task'));
+            newTasks(element);
         }
     }
     
@@ -35,19 +31,22 @@ function tasks() {
             form.reset();
             return;
         }
-        taskList.insertAdjacentHTML('beforeend', `<div class="task"><div class="task__title">${newTask}</div><a href="#" class="task__remove">&times;</a></div>`);
-        tasksArray = Array.from(document.querySelectorAll('.task'));
+        newTasks(newTask);
+        form.reset();
         tasksStorage();
     });
 
     //удаление задачи
-    for (let element of tasksArray) {
-        element.addEventListener('click', (event) => {
-            event.preventDefault();
-            element.remove();
-            tasksArray = Array.from(document.querySelectorAll('.task'));
-            tasksStorage();
-        })
+    taskList.onclick = (event) => {
+        event.preventDefault();
+        for (let element of tasksArray) {
+            removeElement = element.querySelector('.task__remove');
+            if (removeElement === event.target) {
+                element.remove();
+                tasksArray = Array.from(document.querySelectorAll('.task'));
+                tasksStorage();
+            }
+        }
     }
 }
 
