@@ -37,13 +37,10 @@ for (let i = 0; i < productsIDarray.length; i++) {
         let proddValue = parseInt(prodValue.textContent); 
 
         if (productInCart) {
-            cartProducts.find((element) => {
-                if (element.getAttribute('data-id') === iD) {
-                    let currentValue = element.querySelector('.cart__product-count').textContent;
-                    element.querySelector('.cart__product-count').textContent = parseInt(currentValue) + proddValue;
-                    cartProducts = Array.from(document.querySelectorAll('.cart__product'));
-                }
-            });
+            let currentValue = productInCart.querySelector('.cart__product-count').textContent;
+            productInCart.querySelector('.cart__product-count').textContent = parseInt(currentValue) + proddValue;
+            cartProducts = Array.from(document.querySelectorAll('.cart__product'));
+
         } else {
             cart.insertAdjacentHTML('beforeend', `<div class="cart__product" data-id="${prodID}"><img class="cart__product-image" src="${prodIMG}"><div class="cart__product-count">${proddValue}</div></div>`);
             cartProducts = Array.from(document.querySelectorAll('.cart__product'));
