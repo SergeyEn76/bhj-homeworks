@@ -1,13 +1,13 @@
 let form = document.forms.tasks__form;
 let taskList = document.querySelector('.tasks__list');
 let tasksArray = Array.from(document.querySelectorAll('.task'));
-let storageTasks = localStorage.getItem('task');
+let storageTasks = JSON.parse(localStorage.getItem('task'));
 
 function tasksStorage() { //сохранение задач в localstorage
     let tempArray = tasksArray.map((element) => {
         return element.querySelector('.task__title').textContent;
     });
-    localStorage.setItem('task', tempArray);
+    localStorage.setItem('task', JSON.stringify(tempArray));
 }
 
 function newTasks(newtask){ //создание новой задачи
@@ -17,8 +17,7 @@ function newTasks(newtask){ //создание новой задачи
 
 function tasks() { //проверка наличия задач в localstorage и вывод на экран
     if (storageTasks !== null && storageTasks !== '') {
-        let tempStorage = storageTasks.split(',');
-        for (let element of tempStorage) {
+        for (let element of storageTasks) {
             newTasks(element);
         }
     }
