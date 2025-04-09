@@ -11,7 +11,7 @@ if (modalChecked !== 'modalWindow=checked') {
         let removeElement = modalWindow.querySelector('.modal__close_times');
             if (removeElement === event.target) {
                 modalWindow.classList.remove('modal_active');
-                document.cookie = "modalWindow=checked; expires=Tue, 19 Jan 2026 03:14:07 GMT";
+                document.cookie = "modalWindow=checked; max-age=3600";
             }
     })
 }
