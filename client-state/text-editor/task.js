@@ -1,11 +1,9 @@
 let inputText = document.getElementById('editor');
-let storageText = JSON.parse(localStorage.getItem('text'));
+let storageText = localStorage.getItem('text');
 
-if (storageText !== null && storageText !== '') {
-    inputText.textContent = storageText;
-}
+inputText.textContent = storageText;
 
-inputText.addEventListener('mouseleave', () => {
+inputText.addEventListener('input', () => {
     let textTosave = document.getElementById('editor').value;
-    localStorage.setItem('text', JSON.stringify(textTosave));
+    localStorage.setItem('text', textTosave);
 })
